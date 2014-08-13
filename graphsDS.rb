@@ -1,3 +1,10 @@
+=begin
+Note: Implementation of code seen here are used
+for personal educational purposes and do not demonstrate
+any fully practical or optimal solution.
+=end
+
+
 #Standard linked-list node
 #Serves as both a node and linked list
 class AdjacencyNode
@@ -125,6 +132,8 @@ class AdjacencyList
 	end
 end
 
+
+#Tests:
 =begin
 n = AdjacencyNode.new(10, nil)
 n.nextNode = AdjacencyNode.new(20,nil)
