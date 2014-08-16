@@ -16,6 +16,10 @@ GOAL OF THIS FILE:
 			* Need a way to access those attributes of a given Vertex
 		* Work with object_id for easiest vertex accesibility
 		
+	Extra features to consider:
+		* Consider a hash cache in Graphs to store adjacency lists of
+		  recently searched vertices to reduce computational time.
+		
 =end
 
 require 'set'
@@ -30,7 +34,7 @@ class Edge
 	end
 	
 	def to_s
-		"(#{@s.to_s}, #{@d.to_s}"
+		"(#{@s.to_s}, #{@d.to_s})"
 	end
 	
 	def change_s(s)
@@ -52,12 +56,13 @@ class Edge
 end
 
 class Graph
-	attr_reader :vertexSet, :edgeSet, :weightFunction
+	attr_reader :vertexSet, :edgeSet, :extra, :weightFunction
 	
-	def initialize(vlist=nil, elist=nil, &weightFunction)
+	def initialize(vlist=nil, elist=nil, extra = {}, &weightFunction)
 		@vertexSet = Set.new
 		@edgeSet = Set.new
 		@weightFunction = weightFunction
+		@extra = extra
 		
 		if vlist != nil
 			vlist.each {|v| @vertexSet << v}
@@ -75,8 +80,8 @@ class Graph
 	def add_edge(e)
 		if e.class == Edge
 			@edgeSet << e
-			@vertexSet << e.s if !@vertexSet.include?(e.s)
-			@vertexSet << e.d if !@vertexSet.include?(e.d)
+			@vertexSet << e.s if !@vertexSet.include?(e.s) && e.s != nil
+			@vertexSet << e.d if !@vertexSet.include?(e.d) && e.d != nil
 			true
 		else
 			false
@@ -90,6 +95,18 @@ class Graph
 	
 	def add_edges(elist)
 		elist.each {|e| add_edge(e) if e.class == Edge}
+	end
+	
+	def add_edges_from_vertex(u, vlist)
+		vlist.each{|v| add_edge_manual(u,v)}
+	end
+	
+	def vertexSize
+		@vertexSet.size
+	end
+	
+	def edgeSize
+		@edgeSet.size
 	end
 	
 	def adj(u)
