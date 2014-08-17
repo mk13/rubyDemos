@@ -14,12 +14,43 @@ g.add_edges_from_vertex('y', ['q'])
 g.add_edges_from_vertex('z', ['x'])
 
 
-p g.vertexSet
-p g.edgeSet.each {|e| puts e}
+puts 
 
+p "PRINTING VERTEX SET OF ORIGINAL GRAPH:"
+p "======================================"
+p g.vertexSet
+puts 
+
+p "PRINTING ALL EDGES OF ORIGINAL GRAPH:"
+p "====================================="
+g.edgeSet.each {|e| puts e}
+
+puts
+puts
+puts "FINISHED CALCULATING DFS GRAPH"
+puts 
+
+#answer graph
 ag = dfs(g)
 
+puts "PRINTING TREE EDGES:"
+puts "===================="
+p ag.edgeSet
 
-p ag.edgeSet.each {|e| puts e}
+puts
 
-#Yay it works
+puts "PRINTING BACK EDGES:"
+puts "===================="
+p ag.extra['backEdges']
+puts
+
+puts "PRINTING FORWARD EDGES:"
+puts "======================="
+p ag.extra['forwardEdges']
+puts
+
+puts "PRINTING CROSS EDGES:"
+puts "======================="
+p ag.extra['crossEdges']
+puts
+

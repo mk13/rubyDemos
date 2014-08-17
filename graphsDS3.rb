@@ -46,11 +46,13 @@ class Edge
 	end
 	
 	def weight
-		if @w == nil
-			0.0
-		else
-			@w
-		end
+		if @w == nil then 0.0 else @w end
+	end
+	
+	#Useful for mirroring an edge in a
+	#undirected graph
+	def mirror
+		Edge.new(@d, @s, @w, *@extra)
 	end
 	
 end
@@ -93,6 +95,13 @@ class Graph
 		add_edge(e)
 	end
 	
+	def add_undirected_edge_manual(s,d,w=nil, *extra)
+		e = Edge.new(s,d,w,*extra)
+		add_edge(e)
+		e = e.mirror
+		add_edge(e)
+	end
+	
 	def add_edges(elist)
 		elist.each {|e| add_edge(e) if e.class == Edge}
 	end
@@ -109,11 +118,27 @@ class Graph
 		@edgeSet.size
 	end
 	
+	#Returns a LIST of vertices adjacent to vertex u
 	def adj(u)
 		l = Array.new
 		@edgeSet.each do |e|
 			if e.s == u
 				l << e.d
+			end
+		end
+		l
+	end
+	
+	#Returns a list of the original edge objects
+	#with vertex u as the starting
+	#Better to use this if you want to preserve
+	#reference pointers to original edges
+	#rather than creating whole new edges
+	def adjEdges(u)
+		l = Array.new
+		@edgeSet.each do |e|
+			if e.s == u
+				l << e
 			end
 		end
 		l
@@ -127,14 +152,43 @@ class Graph
 		sum
 	end
 	
-	def vertex_weight(v)
+	def vertex_sum_weight(v)
 		sum = 0.0
 		@edgeSet.each do |e|
 			sum += e.weight if e.s == v
 		end
 		sum
 	end
+	
+	#Returns the weightfunction proc-object if it has been defined;
+	#Other wise, returns a closure function that simply looks for edge
+	#in hash and returns weight.
+	def weight_function
+		if @weightFunction != nil
+			@weightFunction
+		else
+			lambda do |u,v|
+				@edgeSet.each{|f| return f.weight if (f.s==u && f.d == v)}
+				return nil
+			end
+		end
+	end
 end
+
+=begin
+g = Graph.new
+g.add_edge_manual('a','b', 5.0)
+g.add_edge_manual('a','c', 6.0)
+g.add_edge_manual('b','c', 7.0)
+g.add_undirected_edge_manual('y','z',10.0)
+
+w = g.weight_function
+
+x =  w.call('a','b')
+p x
+p w.call('d','e')
+p g.edgeSet
+=end
 
 
 =begin
@@ -163,3 +217,4 @@ puts n.class
 p g.sum_weight
 p g.vertex_weight(1)
 =end
+
