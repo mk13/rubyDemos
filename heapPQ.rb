@@ -66,6 +66,21 @@ class HeapPQ
 		@last
 	end
 	
+	def clear
+		@last = 0
+	end
+	
+	def empty?
+		@last == 0
+	end
+	
+	def contains?(e)
+		@arr.each do |v|
+				return true if v == e
+		end
+		false
+	end
+	
 	private
 	def left(i)
 		2*i + 1
