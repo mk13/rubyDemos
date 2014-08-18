@@ -1,3 +1,4 @@
+#Functions to construct hash for you
 module Heaps
 	def Heaps.minHeap
 		HeapPQ.new{|a,b| a <= b}
@@ -68,7 +69,6 @@ class HeapPQ
 	#This version does NOT remove all elements from PQ
 	def collect_preserve
 		copy = @arr.clone[0...@last]
-		copy
 	end
 	
 	def size

@@ -1,5 +1,4 @@
-require_relative 'primAlg'
-
+require_relative 'kruskalAlg'
 
 #Graph construction
 g = Graph.new(['a','b','c','d','e','f','g','h','i'])
@@ -18,9 +17,5 @@ g.add_undirected_edge_manual('f','e',10)
 g.add_undirected_edge_manual('c','d',7)
 
 
-#MST construction
-answer = prim_mst(g, g.weight_function, 'a')
-
-#Print out MST
+answer = kruskal_mst(g,g.weight_function)
 p answer.edgeSet
-p answer.extra['weight']
