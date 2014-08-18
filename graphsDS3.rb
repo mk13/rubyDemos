@@ -49,6 +49,10 @@ class Edge
 		if @w == nil then 0.0 else @w end
 	end
 	
+	def match?(u,v)
+		e.s == u && e.d == v
+	end
+	
 	#Useful for mirroring an edge in a
 	#undirected graph
 	def mirror

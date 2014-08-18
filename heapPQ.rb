@@ -15,6 +15,10 @@ class HeapPQ
 		@f = block	#f = |a,b|{} true if 'a' should be higher priority than 'b'
 	end
 	
+	def defineFunction(&block)
+		@f = block
+	end
+	
 	def enqueue(v)
 		@arr[@last] = v
 		@last+=1
@@ -26,10 +30,21 @@ class HeapPQ
 			nil
 		else
 			ans = @arr[0]
-			@last-=1
+			@last = @last - 1
 			@arr[0] = @arr[@last]
 			heapifyDown(0)
 			ans
+		end
+	end
+	
+	def changeValue(original, new, onlyOnce=true)
+		@last.times do |i|
+			if @arr[i] == original
+				@arr[i] = new if original != new
+				heapifyUp(i)
+				heapifyDown(i)
+				break if onlyOnce
+			end
 		end
 	end
 	
@@ -52,10 +67,8 @@ class HeapPQ
 	
 	#This version does NOT remove all elements from PQ
 	def collect_preserve
-		a = []
-		copy = self.clone
-		copy.each {|v| a << v}
-		a
+		copy = @arr.clone[0...@last]
+		copy
 	end
 	
 	def size
@@ -75,10 +88,12 @@ class HeapPQ
 	end
 	
 	def contains?(e)
-		@arr.each do |v|
-				return true if v == e
-		end
+		@last.times {|i| return true if @arr[i] == e}
 		false
+	end
+	
+	def include?(e)
+		contains?(e)
 	end
 	
 	private
