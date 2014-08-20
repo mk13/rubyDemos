@@ -19,3 +19,6 @@ g.add_undirected_edge_manual('c','d',7)
 
 answer = kruskal_mst(g,g.weight_function)
 p answer.edgeSet
+
+require 'matrix'
+m = Matrix.build(5) {0}

@@ -50,7 +50,11 @@ class Edge
 	end
 	
 	def match?(u,v)
-		e.s == u && e.d == v
+		if e.s == u && e.d == v
+			e
+		else
+			nil
+		end
 	end
 	
 	#Useful for mirroring an edge in a
