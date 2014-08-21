@@ -14,5 +14,5 @@ g.add_edge_manual('y','z',9)
 g.add_edge_manual('z','s',2)
 
 #Running bellmanford alg
-pgraph = bellmanFordAlg(g, g.weight_function, 'x')
+pgraph = bellmanFordAlg(g, g.weight_function, 's')
 pgraph.extra['printPaths'].call

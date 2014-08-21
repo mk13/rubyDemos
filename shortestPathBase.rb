@@ -12,7 +12,7 @@ module SP #Shortest Paths
 		pgraph
 	end
 	
-	#Given edge=(u,v), relaxes the edge
+	#Given edge=(u,v), relaxes the edge		#O(1)
 	def SP.relax(pgraph,e,w)
 		t = pgraph.extra['upperBound'][e.s] + w.call(e.s,e.d)
 		if pgraph.extra['upperBound'][e.d] > t
