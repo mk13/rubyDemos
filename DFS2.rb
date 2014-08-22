@@ -8,7 +8,6 @@ def dfs_visit(originalGraph, answerGraph, u)
 	
 	answerGraph.extra['discoverHash'][u] = $time
 	answerGraph.extra['colorHash'][u] = :gray
-	
 	#Following does NOT preserve original edge objects
 	#from the original graph; therefore harder to 
 	#preserve extra information and weights
@@ -37,10 +36,11 @@ def dfs_visit(originalGraph, answerGraph, u)
 			end
 		end
 	end
-	
 	answerGraph.extra['colorHash'][u] = :black
 	$time++
 	answerGraph.extra['finishHash'][u] = $time
+	answerGraph.extra['topologicalSort'].unshift u
+
 end
 
 def dfs(g)
@@ -51,7 +51,7 @@ def dfs(g)
 	answer_graph = Graph.new(g.vertexSet, nil, 
 		{'colorHash' => colorHash, 'discoverHash' => discoverHash, 'finishHash' => finishHash,
 		 'backEdges' => Set.new, 'forwardEdges' => Set.new, 'crossEdges' => Set.new})
-	
+	answer_graph.extra['topologicalSort'] = []
 	g.vertexSet.sort.each do |u|
 		if answer_graph.extra['colorHash'][u] == :white
 			answer_graph.add_edge_manual(nil, u)

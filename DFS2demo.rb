@@ -54,3 +54,8 @@ puts "======================="
 p ag.extra['crossEdges']
 puts
 
+
+puts "PRINTING TOPOLOGICAL SORT:"
+puts "=========================="
+p ag.extra['topologicalSort']
+

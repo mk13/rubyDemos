@@ -1,7 +1,5 @@
-a = []
+h = Hash.new
+h[1] = 1
+h[2] = 2
 
-a.unshift 5
-a.unshift 3
-a.unshift 2
-
-p a
+puts h.has_key? 'nope'
