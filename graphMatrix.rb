@@ -1,5 +1,9 @@
+#Add a paths matrix?
+#Use inheritance? Move extend functions to the child
+require_relative 'graphsDS3'
+
 class GraphMatrix
-	attr_reader :m
+	attr_accessor :m
 	
 	def initialize(vlist=nil, elist=nil, extra={}, &weightFunction)
 		@vnum = 0
@@ -31,13 +35,13 @@ class GraphMatrix
 	
 	def weight(u,v)
 		if @h[u] < @vnum && @h[v] < @vnum
-			@m[@h[u]].fetch(@h[v],Float::INFINITY)
+			if @m[@h[u]][@h[v]] == nil then Float::INFINITY else @m[@h[u]][@h[v]] end
 		else
 			nil
 		end
 	end
 	
-	def add_edge(u,v,w)
+	def add_edge_manual(u,v,w)
 		if w.class == Integer || Float
 			add_vertex(u)
 			add_vertex(v)
@@ -55,12 +59,17 @@ class GraphMatrix
 		end
 	end
 	
+	def print_hash_key
+		@h.each_pair{ |k,v| puts "#{k.to_s}  =>  #{v+1}"}
+	end
+	
 	def print_matrix
-		@vnum.each do |i|
-			@vnum.each do |j|
-				t = if @m[i][j] == nil then 'inf' else @m[i][j] end
-				if t.class == Fixnum || Integer || Float then print sprintf("%3d   ", t) else print("#{t}   ") end 
+		@vnum.times do |i|
+			@vnum.times do |j|
+				t = if @m[i][j] == nil then '  inf' else @m[i][j] end
+				if t.class == String then print ("#{t}   ") else print sprintf("%5.2f   ", t) end
 			end
+			puts
 		end
 	end
 	
@@ -77,18 +86,9 @@ class GraphMatrix
 			return nil
 		else
 			copy = self.clone
-			
-			@vnum.each do |i|
-				@vnum.each do |j|
-					@vnum.each do |k|
-						t = @m[i][k] + o.m[i][k]
-						copy.m[i][j] = t if copy.m[i][j] > t
-						#Add path change here
-					end
-				end
-			end
+			copy.m = pextend(o)
+			copy
 		end
-		copy
 	end
 	
 	#Does same thing as above, but changes self's matrix
@@ -97,11 +97,28 @@ class GraphMatrix
 		if o.class != GraphMatrix || o.vertex_count != @vnum
 			return nil
 		else
-			self = extend(o)
+			@m = pextend(o)
 			self
 		end
 	end
 	
-	protected
-	attr_accessor :m
+
+	private
+	def pextend(o)
+		c = []
+		@vnum.times do |z|
+			c[z] = []
+		end
+		@vnum.times do |i|
+			@vnum.times do |j|
+				c[i][j] = Float::INFINITY
+				@vnum.times do |k|
+					a = if @m[i][k] == nil then Float::INFINITY else @m[i][k] end
+					b = if o.m[k][j] == nil then Float::INFINITY else o.m[k][j] end
+					c[i][j] = if (a+b) < c[i][j] then (a+b) else c[i][j] end
+				end
+			end
+		end
+		c
+	end
 end
